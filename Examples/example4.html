@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>JQen Variable Example</title>
+</head>
+
+<body>
+    <div id="main"></div>
+    <script>
+        var Module, data, template = `
+<loop set="object" value="item">
+    <div>item[var1] item[var2] item[var3] item[var4]</div>
+</loop>
+<br />
+<loop set="array" value="item">
+    <div>item[0] item[1] item[2] item[3]</div>
+</loop>
+`;
+
+        data = `
+{
+    "object": [
+        {
+            "var1": "value1",
+            "var2": "value2",
+            "var3": "value3",
+            "var4": "value4"
+        },
+        {
+            "var1": "value5",
+            "var2": "value6",
+            "var3": "value7",
+            "var4": "value8"
+        }
+    ],
+    "array": [
+        [
+            "value10",
+            "value20",
+            "value30",
+            "value40"
+        ],
+        [
+            "value100",
+            "value200",
+            "value300",
+            "value400"
+        ]
+    ]
+}`;
+
+        Module = {
+            onRuntimeInitialized: function () {
+                document.getElementById("main").innerHTML = Module.JQen_Render(template, data);
+            }
+        };
+    </script>
+    <script src="JQen.js"></script>
+</body>
+
+</html>

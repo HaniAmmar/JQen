@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>JQen WASM Example 2</title>
+</head>
+
+<body>
+    <div id="main"></div>
+    <script>
+        var Module, data, template = `
+                    <h2>Students' list:</h2>
+                    <loop set="major" key="_m_">
+                        <h3>Major: _m_</h3>
+                        <ul>
+                        <loop set="major[_m_]" value="student_val">
+                            <li>
+                                <span>Name: student_val[Name]</span>
+                                <span>
+                                    GPA: student_val[GPA]
+                                    <if case="student_val[GPA] < 2.5"> (Inform adviser!)
+                                    <elseif case="student_val[GPA] >= 3.5" /> (President's List!)
+                                    <elseif case="student_val[GPA] >= 3.0" /> (Dean's List!)
+                                    </if>
+                                </span>
+                            </li>
+                        </loop>
+                        </ul>
+                    </loop>`;
+
+        data = {
+            'major': {
+                'Computer Science': [
+                    { 'Name': 'Oliver', 'GPA': '3.2' },
+                    { 'Name': 'Jonah', 'GPA': '3.8' },
+                    { 'Name': 'Ava', 'GPA': '2.8' }
+                ],
+                'Math': [
+                    { 'Name': 'Maxim', 'GPA': '3.0' },
+                    { 'Name': 'Cole', 'GPA': '2.5' },
+                    { 'Name': 'Claire', 'GPA': '2.4' }
+                ]
+            }
+        };
+
+        Module = {
+            onRuntimeInitialized: function () {
+                document.getElementById("main").innerHTML = Module.JQen_Render(template, JSON.stringify(data));
+            }
+        };
+    </script>
+    <script src="JQen.js"></script>
+</body>
+
+</html>

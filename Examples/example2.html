@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>JQen Variable Example</title>
+</head>
+
+<body>
+    <div id="main"></div>
+    <script>
+        var Module, data, template = `
+<div>0.1+0.2 is: {math: 0.1  +   0.2 }</div>
+<div>{var:Equation} = {math:{var:Equation}}; (1+8+1)</div>
+<div>6^2 = {math:6^2}</div>
+<div>--1 = {math:--1}</div>
+<div>{var:one}+{var:three} = {math:{var:one}+{var:three}}</div>
+<div>9 % 5 = {math:9 % 5}</div>
+`;
+
+        data = '{"Equation":"1+4*2+1","one":"1","three":"3"}';
+
+        Module = {
+            onRuntimeInitialized: function () {
+                document.getElementById("main").innerHTML = Module.JQen_Render(template, data);
+            }
+        };
+    </script>
+    <script src="JQen.js"></script>
+</body>
+
+</html>

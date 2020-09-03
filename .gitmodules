@@ -1,6 +1,3 @@
-[submodule "qe"]
-	path = qe
-	url = https://github.com/HaniAmmar/Qentem-Engine
 [submodule "qentem"]
 	path = qentem
 	url = https://github.com/HaniAmmar/Qentem-Engine

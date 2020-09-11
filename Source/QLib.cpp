@@ -9,7 +9,7 @@ std::string JQen_Render(const std::string &content, const std::string &json)
 {
     const Qentem::Value value = Qentem::JSON::Parse(json.c_str(), json.length());
     Qentem::String temp = Qentem::Template<>::Render(content.c_str(), content.length(), &value);
-    return std::string(temp.Char(), temp.Length());
+    return std::string(temp.Storage(), temp.Length());
 }
 
 EMSCRIPTEN_BINDINGS(jqen_module)

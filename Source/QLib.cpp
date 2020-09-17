@@ -1,3 +1,4 @@
+#include "JSON.hpp"
 #include "Template.hpp"
 
 #include <emscripten/bind.h>
@@ -7,8 +8,8 @@ using namespace emscripten;
 
 std::string JQen_Render(const std::string &content, const std::string &json)
 {
-    const Qentem::Value value = Qentem::JSON::Parse(json.c_str(), json.length());
-    Qentem::String temp = Qentem::Template<>::Render(content.c_str(), content.length(), &value);
+    const Qentem::Value<char> value = Qentem::JSON::Parse(json.c_str(), json.length());
+    Qentem::StringStream<char> temp = Qentem::Template::Render(content.c_str(), content.length(), &value);
     return std::string(temp.Storage(), temp.Length());
 }
 

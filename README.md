@@ -18,9 +18,10 @@ A JavaScript module that uses [Qentem](https://github.com/HaniAmmar/Qentem-Engin
 
 ## Features
 
+-   Fast HTML templating
 -   Variable replacement
--   Nesting loops
--   Nesting if conditions
+-   nested loop
+-   nested if condition
 -   Inline if
 
 ## Usage

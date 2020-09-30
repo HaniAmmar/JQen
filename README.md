@@ -8,8 +8,9 @@
     -   [Inline If](#inline-if)
     -   [Loop](#loop)
     -   [If Condition](#if-condition)
+-   [Page Example](#page-example)
 -   [Reference](#reference)
--   [Compiling WASM](#compiling-wasm)
+-   [Build WASM](#build-wasm)
 -   [License](#license)
 
 ## What Is JQen
@@ -40,7 +41,7 @@ data = '{"v1":"Qentem","sub-list1":{"sv1":"JQen"},"sub-list2":[77]}';
 
 Module = {
     onRuntimeInitialized: function () {
-        document.getElementById("main").innerHTML = Module.JQen_Render(template, data)
+        document.getElementById("main").innerHTML = Module.JQen_Render(template, data);
     }
 };
 
@@ -63,7 +64,7 @@ data = '{"Equation":"1+4*2+1","one":"1","three":"3"}';
 
 Module = {
     onRuntimeInitialized: function () {
-        document.getElementById("main").innerHTML = Module.JQen_Render(template, data)
+        document.getElementById("main").innerHTML = Module.JQen_Render(template, data);
     }
 };
 
@@ -83,7 +84,7 @@ data = '{"one":"1","two":"2","three":"3","name":"Qentem"}';
 
 Module = {
     onRuntimeInitialized: function () {
-        document.getElementById("main").innerHTML = Module.JQen_Render(template, data)
+        document.getElementById("main").innerHTML = Module.JQen_Render(template, data);
     }
 };
 
@@ -137,7 +138,7 @@ data = `
 
 Module = {
     onRuntimeInitialized: function () {
-        document.getElementById("main").innerHTML = Module.JQen_Render(template, data)
+        document.getElementById("main").innerHTML = Module.JQen_Render(template, data);
     }
 };
 
@@ -186,7 +187,8 @@ Module = {
 
 ```
 
-### Complete Example
+## Page Example
+
 ```html
 <!DOCTYPE html>
 <html>
@@ -194,51 +196,54 @@ Module = {
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>JQen WASM Example 2</title>
+    <title>JQen Page Example</title>
 </head>
 
 <body>
     <div id="main"></div>
-    <script type='text/javascript'>
-        "use strict";
+    <script>
         var Module, data, template = `
-                    <h2>Students' list:</h2>
-                    <loop set="major" key="_m_">
-                        <h3>Major: _m_</h3>
-                        <ul>
-                        <loop set="major[_m_]" value="student_val">
-                            <li>
-                                <span>Name: student_val[Name]</span>
-                                <span>
-                                    GPA: student_val[GPA]
-                                    <if case="student_val[GPA] < 2.5"> (Inform adviser!)
-                                    <elseif case="student_val[GPA] >= 3.5" /> (President's List!)
-                                    <elseif case="student_val[GPA] >= 3.0" /> (Dean's List!)
-                                    </if>
-                                </span>
-                            </li>
-                        </loop>
-                        </ul>
-                    </loop>`;
+        <h2>Students</h2>
+        <loop value="department_val">
+            <h3>Major: department_val[major]</h3>
+            <ul>
+            <loop set="department_val[students]" value="student_val">
+                <li>
+                    <span>Name: student_val[Name]</span>
+                    <span>
+                        GPA: student_val[GPA]
+                        <if case="student_val[GPA] < 2.5"> (Inform adviser!)
+                        <elseif case="student_val[GPA] >= 3.5" /> (President\'s List!)
+                        <elseif case="student_val[GPA] >= 3.0" /> (Dean\'s List!)
+                        </if>
+                    </span>
+                </li>
+            </loop>
+            </ul>
+        </loop>`;
 
-        data = {
-            'major': {
-                'Computer Science': [
-                    { 'Name': 'Oliver', 'GPA': '3.2' },
-                    { 'Name': 'Jonah', 'GPA': '3.8' },
-                    { 'Name': 'Ava', 'GPA': '2.8' }
-                ],
-                'Math': [
-                    { 'Name': 'Maxim', 'GPA': '3.0' },
-                    { 'Name': 'Cole', 'GPA': '2.5' },
-                    { 'Name': 'Claire', 'GPA': '2.4' }
+        data = [
+            {
+                'major': 'Computer Science',
+                'students': [
+                    { 'Name': 'Oliver', 'GPA': 3.2 },
+                    { 'Name': 'Jonah', 'GPA': 3.8 },
+                    { 'Name': 'Jack', 'GPA': 2.8 }
+                ]
+            },
+            {
+                'major': 'Math',
+                'students': [
+                    { 'Name': 'Maxim', 'GPA': 3.0 },
+                    { 'Name': 'Cole', 'GPA': 2.5 },
+                    { 'Name': 'Claire', 'GPA': 2.4 }
                 ]
             }
-        };
+        ];
 
         Module = {
             onRuntimeInitialized: function () {
-                document.getElementById("main").innerHTML = Module.JQen_Render(template, JSON.stringify(data))
+                document.getElementById("main").innerHTML = Module.JQen_Render(template, JSON.stringify(data));
             }
         };
     </script>
@@ -252,7 +257,8 @@ Module = {
 
 Syntax @ [Qentem-Engine/Template.md](https://github.com/HaniAmmar/Qentem-Engine/blob/master/Documentation/Template.md).
 
-## Compiling WASM
+## Build WASM
+
 First: Install [Emscripten](https://emscripten.org/docs/getting_started/downloads.html)
 
 Then:

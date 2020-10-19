@@ -19,11 +19,14 @@ A JavaScript module that uses [Qentem](https://github.com/HaniAmmar/Qentem-Engin
 
 ## Features
 
--   Fast HTML templating
--   Variable replacement
--   nested loop
--   nested if condition
--   Inline if
+-   Fast template rendering.
+-   Low memory usage.
+-   Safe evaluation.
+-   Variable replacement.
+-   Nested loop.
+-   Nested if condition.
+-   Inline if.
+-   Math tag.
 
 ## Usage
 

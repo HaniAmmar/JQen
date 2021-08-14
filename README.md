@@ -23,7 +23,7 @@ A JavaScript module that uses [Qentem](https://github.com/HaniAmmar/Qentem-Engin
 -   Low memory usage.
 -   Safe evaluation.
 -   Variable replacement.
--   Nested loop.
+-   Nested loop (with data grouping and sorting).
 -   Nested if condition.
 -   Inline if.
 -   Math tag.

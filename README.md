@@ -31,6 +31,10 @@ A JavaScript module that uses [Qentem](https://github.com/HaniAmmar/Qentem-Engin
 
 ## Usage
 
+### Live Test
+
+Templates can be tested live @ [JQen Tool](https://haniammar.github.io/JQen-Tool)
+
 ### Variable
 
 ```js

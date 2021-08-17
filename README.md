@@ -20,6 +20,7 @@ A JavaScript module that uses [Qentem](https://github.com/HaniAmmar/Qentem-Engin
 ## Features
 
 -   Fast template rendering.
+-   Low memory usage.
 -   Safe evaluation.
 -   Variable replacement with auto-escaping.
 -   Raw variable replacement **without** auto-escaping.

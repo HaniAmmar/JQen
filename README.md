@@ -263,7 +263,7 @@ Module = {
 
 ## Reference
 
-Syntax @ [Qentem-Engine/Template.md](https://github.com/HaniAmmar/Qentem-Engine/blob/master/Documentation/Template.md).
+Syntax @ [Qentem-Engine/Template.md](https://github.com/HaniAmmar/Qentem-Engine/blob/main/Documentation/Template.md).
 
 ## Build WASM
 

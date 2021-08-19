@@ -8,6 +8,7 @@
     -   [Inline If](#inline-if)
     -   [Loop](#loop)
     -   [If Condition](#if-condition)
+-   [Live Testing](#live-testing)
 -   [Page Example](#page-example)
 -   [Reference](#reference)
 -   [Build WASM](#build-wasm)
@@ -194,6 +195,10 @@ Module = {
 };
 
 ```
+
+## Live Testing
+
+Templates can be tested live @ [JQen Tool](https://haniammar.github.io/JQen-Tool)
 
 ## Page Example
 

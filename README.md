@@ -279,7 +279,7 @@ Then:
 git submodule update --init
 
 mkdir Build
-em++ -Os --bind -I ./qentem/Include ./Source/QLib.cpp -o ./Build/JQen.js
+em++ -Os -msimd128 -D QENTEM_MSIMD128=1 --bind -I ./qentem/Include ./Source/QLib.cpp -o ./Build/JQen.js
 ```
 **Note**: A compiled WASM file is @ [releases](https://github.com/HaniAmmar/JQen/releases)
 

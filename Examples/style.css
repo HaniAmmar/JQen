@@ -1,0 +1,135 @@
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+:root {
+    --main-font-family: Tahoma, Verdana, sans-serif;
+    --main-border-color: teal;
+    --second-border-color: rgb(0, 187, 203);
+}
+
+body {
+    font-family: var(--main-font-family);
+    font-size: 120%;
+    background-color: rgb(39, 39, 44);
+    color: rgb(230, 227, 233);
+    line-height: 1.2em;
+}
+
+legend {
+    color: var(--second-border-color);
+    font-weight: bold;
+}
+
+fieldset {
+    display: inline-block;
+    border-radius: 1em;
+    padding: 0.5em;
+    margin: 0.3em 0.1em;
+    border: 0.15em dotted var(--main-border-color);
+}
+
+textarea {
+    font-family: var(--main-font-family);
+    font-size: 100%;
+    width: 100%;
+    border-radius: 0.5em;
+    padding: 0.2em;
+    margin: 0;
+    transition: 0.5s;
+    color: rgb(230, 227, 233);
+    background-color: rgb(33, 33, 37);
+    border: 0.1em solid var(--main-border-color);
+    line-height: 1.3em;
+}
+
+textarea::selection {
+    background-color: var(--second-border-color);
+    color: rgb(39, 39, 44);
+}
+
+textarea:focus {
+    background-color: rgb(27, 27, 32);
+    outline: 0.1em solid var(--second-border-color);
+    border: 0.1em solid var(--second-border-color);
+}
+
+input[type="radio"] {
+    font-family: var(--main-font-family);
+    height: 1.5em;
+    width: 1.5em;
+}
+
+input[type="radio"]+label {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+input[type="radio"]:hover+label {
+    color: mediumaquamarine;
+}
+
+input[type="radio"]:checked+label {
+    color: turquoise;
+}
+
+button {
+    font-family: var(--main-font-family);
+    font-size: 100%;
+    font-weight: bold;
+    text-align: center;
+    min-width: 4em;
+    padding: 0.4em;
+    margin: 0.5em 0 0 0.5em;
+    transition: 0.5s;
+    color: rgb(39, 39, 44);
+    border-radius: 25%;
+    display: inline-block;
+    background-image: linear-gradient(to bottom,
+            var(--main-border-color) 0%,
+            var(--second-border-color) 51%,
+            var(--main-border-color) 100%);
+}
+
+button:hover {
+    color: rgb(230, 227, 233);
+    background-image: linear-gradient(to bottom,
+            var(--second-border-color) 0%,
+            var(--main-border-color) 51%,
+            var(--second-border-color) 100%);
+}
+
+#main {
+    width: 100%;
+    display: block;
+    padding: 0.1em;
+    margin: 0 auto;
+    text-align: center;
+    flex-wrap: wrap;
+}
+
+#main>div {
+    padding: 0;
+    margin: 1em auto 0.5em auto;
+}
+
+.options {
+    text-align: right;
+}
+
+@media only screen and (max-width: 768px) {
+    #main {
+        width: 90%;
+    }
+
+    fieldset {
+        display: block;
+    }
+
+    #main {
+        flex-direction: column-reverse;
+    }
+}

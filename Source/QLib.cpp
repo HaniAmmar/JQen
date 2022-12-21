@@ -25,6 +25,7 @@ static std::wstringstream jqen_ss;
 
 std::wstring JQen_RunTests()
 {
+    jqen_ss = std::wstringstream{};
     Qentem::Test::TestHelper::Init();
     Qentem::Test::PrintInfo();
     Qentem::Test::RunTests();

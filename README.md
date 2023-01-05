@@ -39,8 +39,9 @@ Templates can be tested live @ [JQen Tool](https://haniammar.github.io/JQen-Tool
 ### Variable
 
 ```js
-
-var Module, data, template = `
+var Module,
+    data,
+    template = `
 <div>{var:v1}</div>
 <div>{var:sub-list1[sv1]}</div>
 <div>{var:sub-list2[0]}</div>
@@ -50,17 +51,21 @@ data = '{"v1":"Qentem","sub-list1":{"sv1":"JQen"},"sub-list2":[77]}';
 
 Module = {
     onRuntimeInitialized: function () {
-        document.getElementById("main").innerHTML = Module.JQen_Render(template, data);
-    }
+        document.getElementById("main").innerHTML = Module.JQen_Render(
+            template,
+            data,
+            "template name" // Optional for caching parsed template.
+        );
+    },
 };
-
 ```
 
 ### Math
 
 ```js
-
-var Module, data, template = `
+var Module,
+    data,
+    template = `
 <div>0.1+0.2 is: {math: 0.1  +   0.2 }</div>
 <div>{var:Equation} = {math:{var:Equation}}; (1+8+1)</div>
 <div>6^2 = {math:6^2}</div>
@@ -73,17 +78,21 @@ data = '{"Equation":"1+4*2+1","one":"1","three":"3"}';
 
 Module = {
     onRuntimeInitialized: function () {
-        document.getElementById("main").innerHTML = Module.JQen_Render(template, data);
-    }
+        document.getElementById("main").innerHTML = Module.JQen_Render(
+            template,
+            data,
+            "template name" // Optional for caching parsed template.
+        );
+    },
 };
-
 ```
 
 ### Inline If
 
 ```js
-
-var Module, data, template = `
+var Module,
+    data,
+    template = `
 <div>{if case="{var:one} + {var:two} >= {var:three}" true="3" false="not three"}</div>
 <div>{if case="{var:one}" true="{var:one}" false="not one"}</div>
 {if case="{var:name} == Qentem" true="<div>Qentem!</div>"}
@@ -93,17 +102,21 @@ data = '{"one":"1","two":"2","three":"3","name":"Qentem"}';
 
 Module = {
     onRuntimeInitialized: function () {
-        document.getElementById("main").innerHTML = Module.JQen_Render(template, data);
-    }
+        document.getElementById("main").innerHTML = Module.JQen_Render(
+            template,
+            data,
+            "template name" // Optional for caching parsed template.
+        );
+    },
 };
-
 ```
 
 ### Loop
 
 ```js
-
-var Module, data, template = `
+var Module,
+    data,
+    template = `
 <loop set="object" value="item">
     <div>item[var1] item[var2] item[var3] item[var4]</div>
 </loop>
@@ -147,17 +160,21 @@ data = `
 
 Module = {
     onRuntimeInitialized: function () {
-        document.getElementById("main").innerHTML = Module.JQen_Render(template, data);
-    }
+        document.getElementById("main").innerHTML = Module.JQen_Render(
+            template,
+            data,
+            "template name" // Optional for caching parsed template.
+        );
+    },
 };
-
 ```
 
 ### If Condition
 
 ```js
-
-var Module, data, template = `
+var Module,
+    data,
+    template = `
 <if case="{var:0} == 0">
 <div>Zero!</div>
 </if>
@@ -190,10 +207,13 @@ data = "[0,1,2,3]";
 
 Module = {
     onRuntimeInitialized: function () {
-        document.getElementById("main").innerHTML = Module.JQen_Render(template, data)
-    }
+        document.getElementById("main").innerHTML = Module.JQen_Render(
+            template,
+            data,
+            "template name" // Optional for caching parsed template.
+        );
+    },
 };
-
 ```
 
 ## Live Testing
@@ -205,17 +225,18 @@ Templates can be tested live @ [JQen Tool](https://haniammar.github.io/JQen-Tool
 ```html
 <!DOCTYPE html>
 <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>JQen Page Example</title>
+    </head>
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>JQen Page Example</title>
-</head>
-
-<body>
-    <div id="main"></div>
-    <script>
-        var Module, data, template = `
+    <body>
+        <div id="main"></div>
+        <script>
+            var Module,
+                data,
+                template = `
         <h2>Students</h2>
         <loop value="department_val">
             <h3>Major: department_val[major]</h3>
@@ -235,34 +256,38 @@ Templates can be tested live @ [JQen Tool](https://haniammar.github.io/JQen-Tool
             </ul>
         </loop>`;
 
-        data = [
-            {
-                'major': 'Computer Science',
-                'students': [
-                    { 'Name': 'Oliver', 'GPA': 3.2 },
-                    { 'Name': 'Jonah', 'GPA': 3.8 },
-                    { 'Name': 'Jack', 'GPA': 2.8 }
-                ]
-            },
-            {
-                'major': 'Math',
-                'students': [
-                    { 'Name': 'Maxim', 'GPA': 3.0 },
-                    { 'Name': 'Cole', 'GPA': 2.5 },
-                    { 'Name': 'Claire', 'GPA': 2.4 }
-                ]
-            }
-        ];
+            data = [
+                {
+                    major: "Computer Science",
+                    students: [
+                        { Name: "Oliver", GPA: 3.2 },
+                        { Name: "Jonah", GPA: 3.8 },
+                        { Name: "Jack", GPA: 2.8 },
+                    ],
+                },
+                {
+                    major: "Math",
+                    students: [
+                        { Name: "Maxim", GPA: 3.0 },
+                        { Name: "Cole", GPA: 2.5 },
+                        { Name: "Claire", GPA: 2.4 },
+                    ],
+                },
+            ];
 
-        Module = {
-            onRuntimeInitialized: function () {
-                document.getElementById("main").innerHTML = Module.JQen_Render(template, JSON.stringify(data));
-            }
-        };
-    </script>
-    <script src="JQen.js"></script>
-</body>
-
+            Module = {
+                onRuntimeInitialized: function () {
+                    document.getElementById("main").innerHTML =
+                        Module.JQen_Render(
+                            template,
+                            JSON.stringify(data),
+                            "MainPage"
+                        );
+                },
+            };
+        </script>
+        <script src="JQen.js"></script>
+    </body>
 </html>
 ```
 
@@ -272,16 +297,18 @@ Syntax @ [Qentem-Engine/Template.md](https://github.com/HaniAmmar/Qentem-Engine/
 
 ## Build WASM
 
-First: Install [Emscripten](https://emscripten.org/docs/getting_started/downloads.html)
+Install [Emscripten](https://emscripten.org/docs/getting_started/downloads.html)
 
 Then:
+
 ```shell
 git submodule update --init
 
 mkdir Build
-em++ -Os -fno-exceptions -msimd128 -D QENTEM_MSIMD128=1 --bind -I ./qentem/Include ./Source/QLib.cpp -o ./Build/JQen.js
+em++ -lembind -Os -fno-exceptions -I ./qentem/Include ./Source/QLib.cpp -o ./Build/JQen.js
 ```
-**Note**: A compiled WASM file is @ [releases](https://github.com/HaniAmmar/JQen/releases)
+
+**Note**: Compiled WASM file: https://github.com/HaniAmmar/JQen/releases
 
 ## License
 

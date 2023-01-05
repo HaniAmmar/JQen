@@ -51,7 +51,8 @@
 
         Module = {
             onRuntimeInitialized: function () {
-                document.getElementById("main").innerHTML = Module.JQen_Render(template, JSON.stringify(data));
+                document.getElementById("main").innerHTML = Module.JQen_Render(template, JSON.stringify(data),
+                    "MainPage");
             }
         };
     </script>

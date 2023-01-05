@@ -14,21 +14,18 @@ std::string JQen_Render(const std::string &content, const std::string &json)
 }
 
 #ifdef JQEN_ENABLE_TESTS
-#define QENTEM_ENABLE_COLORED_OUTPUT 0
-
 #include <sstream>
 static std::wstringstream jqen_ss;
-
-#define QENTEM_OUTPUT_STREAM_TYPE std::wstringstream
 #define QENTEM_OUTPUT_STREAM jqen_ss
 #include "Test.hpp"
 
 std::wstring JQen_RunTests()
 {
+    Qentem::TestOutPut::SetColoredOutput(false);
     jqen_ss = std::wstringstream{};
-    Qentem::Test::TestHelper::Init();
-    Qentem::Test::PrintInfo();
+    Qentem::TestHelper::PrintInfo();
     Qentem::Test::RunTests();
+    // Qentem::MemoryRecord::PrintMemoryStatus();
 
     return jqen_ss.str();
 }

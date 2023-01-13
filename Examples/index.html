@@ -41,17 +41,18 @@
                 tt = document.getElementById("template_txt"),
                 jt = document.getElementById("json_txt");
 
-            tt.value = `<h2>Students</h2>
+            tt.value = `<h2>Students' list:</h2>
 <loop value="department_val">
-    <h3>Major: department_val[major]</h3>
+    <h3>Major: {var:department_val[major]}</h3>
     <ul>
     <loop set="department_val[students]" value="student_val">
         <li>
-            <span>Name: student_val[Name]</span>
-            <span>GPA: student_val[GPA]
-                <if case="student_val[GPA] < 2.5"> (Inform adviser!)
-                <elseif case="student_val[GPA] >= 3.5" /> (President\'s List!)
-                <elseif case="student_val[GPA] >= 3.0" /> (Dean\'s List!)
+            <span>Name: {var:student_val[Name]</span>
+            <span>
+                GPA: {var:student_val[GPA]}
+                <if case="{var:student_val[GPA]} < 2.5"> (Inform adviser!)
+                <elseif case="{var:student_val[GPA]} >= 3.5" /> (President's List!)
+                <elseif case="{var:student_val[GPA]} >= 3.0" /> (Dean's List!)
                 </if>
             </span>
         </li>

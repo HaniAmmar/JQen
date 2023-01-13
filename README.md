@@ -118,11 +118,11 @@ var Module,
     data,
     template = `
 <loop set="object" value="item">
-    <div>item[var1] item[var2] item[var3] item[var4]</div>
+    <div>{var:item[var1]} {var:item[var2]} {var:item[var3]} {var:item[var4]}</div>
 </loop>
 <br />
 <loop set="array" value="item">
-    <div>item[0] item[1] item[2] item[3]</div>
+    <div>{var:item[0]} {var:item[1]} {var:item[2]} {var:item[3]}</div>
 </loop>
 `;
 
@@ -236,19 +236,18 @@ Templates can be tested live @ [JQen Tool](https://haniammar.github.io/JQen-Tool
         <script>
             var Module,
                 data,
-                template = `
-        <h2>Students</h2>
+                template = `<h2>Students' list:</h2>
         <loop value="department_val">
-            <h3>Major: department_val[major]</h3>
+            <h3>Major: {var:department_val[major]}</h3>
             <ul>
             <loop set="department_val[students]" value="student_val">
                 <li>
-                    <span>Name: student_val[Name]</span>
+                    <span>Name: {var:student_val[Name]</span>
                     <span>
-                        GPA: student_val[GPA]
-                        <if case="student_val[GPA] < 2.5"> (Inform adviser!)
-                        <elseif case="student_val[GPA] >= 3.5" /> (President\'s List!)
-                        <elseif case="student_val[GPA] >= 3.0" /> (Dean\'s List!)
+                        GPA: {var:student_val[GPA]}
+                        <if case="{var:student_val[GPA]} < 2.5"> (Inform adviser!)
+                        <elseif case="{var:student_val[GPA]} >= 3.5" /> (President's List!)
+                        <elseif case="{var:student_val[GPA]} >= 3.0" /> (Dean's List!)
                         </if>
                     </span>
                 </li>

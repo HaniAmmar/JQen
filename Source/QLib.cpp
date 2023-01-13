@@ -7,7 +7,7 @@
 using namespace emscripten;
 
 static std::string JQen_Render(const std::string &content, const std::string &json, const std::string &name) {
-    using QTagBit = Qentem::Array<Qentem::Template::TagBit<char>>;
+    using QTagBit = Qentem::Array<Qentem::Template::TagBit>;
     using QHArray = Qentem::HArray<QTagBit, char>;
 
     static QHArray                    cache;

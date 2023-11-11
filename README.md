@@ -313,7 +313,7 @@ em++ -lembind -Os -fno-exceptions -I ./qentem/Include ./Source/QLib.cpp -o ./Bui
 
 > MIT License
 >
-> Copyright (c) 2020 Hani Ammar
+> Copyright (c) 2023 Hani Ammar
 >
 > Permission is hereby granted, free of charge, to any person obtaining a copy
 > of this software and associated documentation files (the "Software"), to deal

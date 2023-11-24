@@ -41,7 +41,8 @@ static std::wstringstream jqen_ss;
 #include "Test.hpp"
 
 std::wstring JQen_RunTests() {
-    Qentem::TestOutPut::SetColoredOutput(false);
+    Qentem::TestOutPut::IsColored = false;
+
     jqen_ss = std::wstringstream{};
     Qentem::TestHelper::PrintInfo();
     Qentem::Test::RunTests();

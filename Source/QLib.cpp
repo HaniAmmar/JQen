@@ -35,20 +35,17 @@ static std::string JQen_Render(const std::string &content, const std::string &js
 }
 
 #ifdef JQEN_ENABLE_TESTS
-#include <sstream>
-static std::wstringstream jqen_ss;
-#define QENTEM_OUTPUT_STREAM jqen_ss
 #include "Test.hpp"
 
 std::wstring JQen_RunTests() {
     Qentem::TestOutPut::IsColored = false;
+    Qentem::TestOutPut::IsCached  = true;
 
-    jqen_ss = std::wstringstream{};
     Qentem::TestHelper::PrintInfo();
     Qentem::Test::RunTests();
     // Qentem::MemoryRecord::PrintMemoryStatus();
 
-    return jqen_ss.str();
+    return Qentem::TestOutPut::GetCachedStream().str();
 }
 #endif
 

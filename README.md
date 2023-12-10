@@ -304,7 +304,7 @@ Then:
 git submodule update --init
 
 mkdir Build
-em++ -lembind -Os -fno-exceptions -I ./qentem/Include ./Source/QLib.cpp -o ./Build/JQen.js
+em++ -lembind -Os -fno-exceptions -std=c++17 -msimd128 -D QENTEM_MSIMD128=1 -I ./qentem/Include ./Source/QLib.cpp -o ./Build/JQen.js
 ```
 
 **Note**: Compiled WASM file: https://github.com/HaniAmmar/JQen/releases

@@ -38,14 +38,16 @@ static std::string JQen_Render(const std::string &content, const std::string &js
 #include "Test.hpp"
 
 std::wstring JQen_RunTests() {
+    std::wstringstream wss{};
+    Qentem::TestOutPut::SetCachedStream(&wss);
+
     Qentem::TestOutPut::IsColored = false;
-    Qentem::TestOutPut::IsCached  = true;
 
     Qentem::TestHelper::PrintInfo();
     Qentem::Test::RunTests();
     // Qentem::MemoryRecord::PrintMemoryStatus();
 
-    return Qentem::TestOutPut::GetCachedStream().str();
+    return wss.str();
 }
 #endif
 

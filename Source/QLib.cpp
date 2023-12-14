@@ -18,7 +18,7 @@ static std::string JQen_Render(const std::string &content, const std::string &js
     stream.Clear();
 
     if (name.length() != 0) {
-        tags = &(cache.GetOrAdd(name.c_str(), name.length()));
+        tags = &(cache.Get(name.c_str(), name.length()));
     } else {
         tags_cache.Clear();
         tags = &tags_cache;
@@ -41,9 +41,9 @@ std::wstring JQen_RunTests() {
     std::wstringstream wss{};
     Qentem::TestOutPut::SetCachedStream(&wss);
 
-    Qentem::TestOutPut::IsColored = false;
+    Qentem::TestOutPut::IsColored() = false;
 
-    Qentem::TestHelper::PrintInfo();
+    Qentem::QTest::PrintInfo();
     Qentem::Test::RunTests();
     // Qentem::MemoryRecord::PrintMemoryStatus();
 

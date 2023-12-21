@@ -39,7 +39,7 @@ static std::string JQen_Render(const std::string &content, const std::string &js
 
 std::wstring JQen_RunTests() {
     std::wstringstream wss{};
-    Qentem::TestOutPut::SetCachedStream(&wss);
+    Qentem::TestOutPut::SetStreamCache(&wss);
 
     Qentem::TestOutPut::IsColored() = false;
 

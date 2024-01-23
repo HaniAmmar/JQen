@@ -231,7 +231,7 @@ Templates can be tested live @ [JQen Tool](https://haniammar.github.io/JQen-Tool
     </head>
 
     <body>
-        <div id="main"></div>
+        <div  id="container"></div>
         <script>
             var Module,
                 data,

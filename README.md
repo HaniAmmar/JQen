@@ -312,7 +312,7 @@ em++ -lembind -Os -fno-exceptions -std=c++17 -msimd128 -D QENTEM_MSIMD128=1 -I .
 
 > MIT License
 >
-> Copyright (c) 2023 Hani Ammar
+> Copyright (c) 2024 Hani Ammar
 >
 > Permission is hereby granted, free of charge, to any person obtaining a copy
 > of this software and associated documentation files (the "Software"), to deal

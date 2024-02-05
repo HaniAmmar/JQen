@@ -14,25 +14,19 @@
             <legend>Template:</legend>
             <textarea id="template_txt" cols="50" rows="10"></textarea>
         </fieldset>
-
         <fieldset>
             <legend>JSON:</legend>
             <textarea id="json_txt" cols="50" rows="10"></textarea>
         </fieldset>
-
         <br>
-
         <fieldset>
             <legend>Result:</legend>
             <textarea id="rendered_txt" cols="50" rows="10"></textarea>
         </fieldset>
-
         <br>
         <br>
-
         <button id="render">Render Template</button>
     </div>
-
     <script src="JQen.js"></script>
     <script type='text/javascript'>
         "use strict";
@@ -51,8 +45,8 @@
             <span>
                 GPA: {var:student_val[GPA]}
                 <if case="{var:student_val[GPA]} < 2.5"> (Inform adviser!)
-                <elseif case="{var:student_val[GPA]} >= 3.5" /> (President's List!)
-                <elseif case="{var:student_val[GPA]} >= 3.0" /> (Dean's List!)
+                <else if case="{var:student_val[GPA]} >= 3.5"> (President's List!)
+                <else if case="{var:student_val[GPA]} >= 3.0"> (Dean's List!)
                 </if>
             </span>
         </li>

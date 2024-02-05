@@ -186,7 +186,7 @@ Zero!
 
 <if case="{var:2} == 0">
 Zero!
-<elseif case="{var:2} == 2" />
+<else if case="{var:2} == 2">
 <div>Two!</div>
 <else />
 Not zero or one.
@@ -194,11 +194,11 @@ Not zero or one.
 
 <if case="{var:2} == 0">
 Zero!
-<elseif case="{var:2} == 5" />
+<else if case="{var:2} == 5">
 Two!
-<elseif case="{var:3} == 3" />
+<else if case="{var:3} == 3">
 <div>{var:3}</div>
-<else />
+<else>
 Not zero or one or two.
 </if>`;
 
@@ -245,8 +245,8 @@ Templates can be tested live @ [JQen Tool](https://haniammar.github.io/JQen-Tool
                     <span>
                         GPA: {var:student_val[GPA]}
                         <if case="{var:student_val[GPA]} < 2.5"> (Inform adviser!)
-                        <elseif case="{var:student_val[GPA]} >= 3.5" /> (President's List!)
-                        <elseif case="{var:student_val[GPA]} >= 3.0" /> (Dean's List!)
+                        <else if case="{var:student_val[GPA]} >= 3.5"> (President's List!)
+                        <else if case="{var:student_val[GPA]} >= 3.0"> (Dean's List!)
                         </if>
                     </span>
                 </li>

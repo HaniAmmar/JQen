@@ -7,19 +7,19 @@ It enables fast, safe, and efficient template rendering with JSON data directly 
 
 ## Table of Contents
 
-* [What is JQen?](#what-is-jqen)
-* [Features](#features)
-* [Usage](#usage)
-  * [Live Testing](#live-testing)
-  * [Variable](#variable)
-  * [Math](#math)
-  * [Inline If](#inline-if)
-  * [Loop](#loop)
-  * [If Condition](#if-condition)
-* [Page Example](#page-example)
-* [Reference](#reference)
-* [Build WASM](#build-wasm)
-* [License](#license)
+-   [What is JQen?](#what-is-jqen)
+-   [Features](#features)
+-   [Usage](#usage)
+    -   [Live Testing](#live-testing)
+    -   [Variable](#variable)
+    -   [Math](#math)
+    -   [Inline If](#inline-if)
+    -   [Loop](#loop)
+    -   [If Condition](#if-condition)
+-   [Page Example](#page-example)
+-   [Reference](#reference)
+-   [Build WASM](#build-wasm)
+-   [License](#license)
 
 ---
 
@@ -32,14 +32,14 @@ Bring the full power of C++ template parsing and JSON data handling to web brows
 
 ## Features
 
-* Fast template rendering implemented in C++ and compiled to WebAssembly.
-* Low memory overhead.
-* Safe evaluation without arbitrary code execution.
-* Variable replacement with automatic HTML escaping.
-* Raw variable replacement (without HTML escaping) is also supported.
-* Nested loops with grouping and sorting.
-* Nested if conditions and inline conditional tags.
-* Arithmetic evaluation via the math tag.
+-   Fast template rendering implemented in C++ and compiled to WebAssembly.
+-   Low memory overhead.
+-   Safe evaluation without arbitrary code execution.
+-   Variable replacement with automatic HTML escaping.
+-   Raw variable replacement (without HTML escaping) is also supported.
+-   Nested loops with grouping and sorting.
+-   Nested if conditions and inline conditional tags.
+-   Arithmetic evaluation via the math tag.
 
 ---
 
@@ -56,7 +56,9 @@ JQen templates can be tested live at [JQen Tool](https://haniammar.github.io/JQe
 Insert variables into your template using `{var:...}` syntax:
 
 ```js
-var Module, data, template = `
+var Module,
+    data,
+    template = `
 <div>{var:v1}</div>
 <div>{var:sub-list1[sv1]}</div>
 <div>{var:sub-list2[0]}</div>
@@ -82,7 +84,9 @@ Module = {
 Evaluate arithmetic expressions in your template:
 
 ```js
-var Module, data, template = `
+var Module,
+    data,
+    template = `
 <div>0.1+0.2 is: {math: 0.1 + 0.2}</div>
 <div>{var:one}+{var:four}*{var:two}+{var:one} = {math:{var:one}+{var:four}*{var:two}+{var:one}}</div>
 <div>6^2 = {math:6^2}</div>
@@ -106,7 +110,9 @@ Module = {
 Add conditional logic directly within templates:
 
 ```js
-var Module, data, template = `
+var Module,
+    data,
+    template = `
 <div>{if case="{var:one} + {var:two} >= {var:three}" true="3" false="not three"}</div>
 <div>{if case="{var:one}" true="{var:one}" false="not one"}</div>
 {if case="{var:name} == Qentem" true="<div>Qentem!</div>"}
@@ -128,7 +134,9 @@ Module = {
 Render arrays and objects using loops:
 
 ```js
-var Module, data, template = `
+var Module,
+    data,
+    template = `
 <loop set="object" value="item">
     <div>{var:item[var1]} {var:item[var2]} {var:item[var3]} {var:item[var4]}</div>
 </loop>
@@ -164,7 +172,9 @@ Module = {
 Use full conditional blocks for complex logic:
 
 ```js
-var Module, data, template = `
+var Module,
+    data,
+    template = `
 <if case="{var:0} == 0">
 <div>Zero!</div>
 </if>
@@ -197,7 +207,7 @@ data = "[0,1,2,3]";
 
 Module = {
     onRuntimeInitialized: function () {
-    JQen_Render(
+        JQen_Render(
             template,
             data,
             "template name" // (Optional) Name to cache the parsed template.
@@ -215,14 +225,16 @@ A complete HTML page using JQen:
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <title>JQen Page Example</title>
-</head>
-<body>
-    <div id="main"></div>
-    <script>
-        var Module, data, template = `<h2>Students' list:</h2>
+    <head>
+        <meta charset="utf-8" />
+        <title>JQen Page Example</title>
+    </head>
+    <body>
+        <div id="main"></div>
+        <script>
+            var Module,
+                data,
+                template = `<h2>Students' list:</h2>
 <loop value="department_val">
     <h3>Major: {var:department_val[major]}</h3>
     <ul>
@@ -241,38 +253,37 @@ A complete HTML page using JQen:
     </ul>
 </loop>`;
 
-        data = [
-            {
-                major: "Computer Science",
-                students: [
-                    { Name: "Student1", GPA: 3.2 },
-                    { Name: "Student2", GPA: 3.8 },
-                    { Name: "Student3", GPA: 2.8 },
-                ],
-            },
-            {
-                major: "Math",
-                students: [
-                    { Name: "Student4", GPA: 3.0 },
-                    { Name: "Student5", GPA: 2.5 },
-                    { Name: "Student6", GPA: 2.4 },
-                ],
-            },
-        ];
+            data = [
+                {
+                    major: "Computer Science",
+                    students: [
+                        { Name: "Student1", GPA: 3.2 },
+                        { Name: "Student2", GPA: 3.8 },
+                        { Name: "Student3", GPA: 2.8 },
+                    ],
+                },
+                {
+                    major: "Math",
+                    students: [
+                        { Name: "Student4", GPA: 3.0 },
+                        { Name: "Student5", GPA: 2.5 },
+                        { Name: "Student6", GPA: 2.4 },
+                    ],
+                },
+            ];
 
-        Module = {
-            onRuntimeInitialized: function () {
-                document.getElementById("main").innerHTML =
-                    Module.JQen_Render(
+            Module = {
+                onRuntimeInitialized: function () {
+                    document.getElementById("main").innerHTML = Module.JQen_Render(
                         template,
                         JSON.stringify(data),
                         "MainPage"
                     );
-            },
-        };
-    </script>
-    <script src="JQen.js"></script>
-</body>
+                },
+            };
+        </script>
+        <script src="JQen.js"></script>
+    </body>
 </html>
 ```
 
@@ -293,11 +304,11 @@ Full template syntax: [Qentem-Engine/Template.md](https://github.com/HaniAmmar/Q
 git submodule update --init
 
 mkdir Build
-em++ -lembind -Os -fno-exceptions -std=c++17 -msimd128 -D QENTEM_MSIMD128=1 -I ./qentem/Include ./Source/QLib.cpp -o ./Build/JQen.js
+em++ -lembind -Oz -flto -fno-exceptions -std=c++17 -I ./qentem/Include ./Source/QLib.cpp -o ./Build/JQen.js
 ```
 
-* Compiled WASM files and releases:
-  [JQen Releases](https://github.com/HaniAmmar/JQen/releases)
+-   Compiled WASM files and releases:
+    [JQen Releases](https://github.com/HaniAmmar/JQen/releases)
 
 ---
 

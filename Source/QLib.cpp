@@ -37,17 +37,16 @@ static std::string JQen_Render(const std::string &content, const std::string &js
 #ifdef JQEN_ENABLE_TESTS
 #include "Test.hpp"
 
-std::wstring JQen_RunTests() {
-    std::wstringstream wss{};
-    Qentem::TestOutPut::SetStreamCache(&wss);
+std::string JQen_RunTests() {
+    Qentem::TestOutput::DisableOutput();
 
-    Qentem::TestOutPut::IsColored() = false;
+    Qentem::TestOutput::IsColored() = false;
 
     Qentem::QTest::PrintInfo();
     Qentem::Test::RunTests();
     // Qentem::MemoryRecord::PrintMemoryStatus();
-
-    return wss.str();
+    auto &ss = Qentem::TestOutput::GetStreamCache();
+    return std::string{ss.First(), ss.Length()};
 }
 #endif
 

@@ -4,13 +4,14 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>JQen WASM Example 2</title>
+    <title>JQen WASM Example 6</title>
 </head>
 
 <body>
     <div id="container"></div>
+    <script src="JQen.js" defer></script>
     <script>
-        var Module, data, template = `<h2>Students' list:</h2>
+        const template = `<h2>Students' list:</h2>
         <loop value="department_val">
             <h3>Major: {var:department_val[major]}</h3>
             <ul>
@@ -20,8 +21,8 @@
                     <span>
                         GPA: {var:student_val[GPA]}
                         <if case="{var:student_val[GPA]} < 2.5"> (Inform adviser!)
-                        <else if case="{var:student_val[GPA]} >= 3.5"> (President's List!)
-                        <else if case="{var:student_val[GPA]} >= 3.0"> (Dean's List!)
+                        <elseif case="{var:student_val[GPA]} >= 3.5" /> (President's List!)
+                        <elseif case="{var:student_val[GPA]} >= 3.0" /> (Dean's List!)
                         </if>
                     </span>
                 </li>
@@ -29,7 +30,7 @@
             </ul>
         </loop>`;
 
-        data = [
+        const data = [
             {
                 'major': 'Computer Science',
                 'students': [
@@ -48,14 +49,25 @@
             }
         ];
 
-        Module = {
-            onRuntimeInitialized: function () {
-                document.getElementById("container").innerHTML = Module.JQen_Render(template, JSON.stringify(data),
-                    "MainPage");
-            }
-        };
+        const JQenRender = (() => {
+            let instance = null;
+
+            return async (template, data, name = "") => {
+                if (!instance) {
+                    instance = JQenModule().then((Module) => {
+                        Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
+                        return Module;
+                    });
+                }
+
+                return (await instance).Render(template, data, name);
+            };
+        })();
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            document.getElementById("container").innerHTML = await JQenRender(template, JSON.stringify(data));
+        });
     </script>
-    <script src="JQen.js"></script>
 </body>
 
 </html>

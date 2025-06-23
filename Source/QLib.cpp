@@ -1,43 +1,77 @@
+#include <cstddef>
+
+#ifndef QENTEM_ALLOCATE
+#define QENTEM_ALLOCATE(size) __builtin_malloc(size)
+#define QENTEM_DEALLOCATE(ptr) __builtin_free(ptr)
+#define QENTEM_RAW_ALLOCATE(size) __builtin_malloc(size)
+#define QENTEM_RAW_DEALLOCATE(ptr) __builtin_free(ptr)
+
+template <typename Type_T>
+void *operator new(std::size_t, Type_T *ptr) noexcept {
+    return ptr;
+}
+
+template <typename Type_T>
+void operator delete(void *, Type_T *) noexcept {
+    // No-op: required to match placement new
+}
+#endif // QENTEM_ALLOCATE
+
+#include "QCommon.hpp"
 #include "JSON.hpp"
 #include "Template.hpp"
 
-#include <emscripten/bind.h>
-#include <emscripten/val.h>
+using namespace Qentem;
 
-using namespace emscripten;
+struct QentemRenderStorage {
+    using QTagBit = Array<Tags::TagBit>;
+    using QHArray = HArray<String<char>, QTagBit>;
 
-static std::string JQen_Render(const std::string &content, const std::string &json, const std::string &name) {
-    using QTagBit = Qentem::Array<Qentem::Tags::TagBit>;
-    using QHArray = Qentem::HArray<Qentem::String<char>, QTagBit>;
+    inline static QHArray            Map{2};
+    inline static QTagBit            TagsCache{2};
+    inline static StringStream<char> Stream{64};
+};
 
-    static QHArray                    cache;
-    static Qentem::StringStream<char> stream;
-    static QTagBit                    tags_cache;
-    QTagBit                          *tags;
+/**
+ * @brief Renders a Qentem template from UTF-8 content and JSON data using optional caching.
+ *
+ * @param content        Pointer to template content.
+ * @param content_length Length of template content in bytes.
+ * @param json           Pointer to JSON string.
+ * @param json_length    Length of JSON string in bytes.
+ * @param name           Optional cache key name.
+ * @param name_length    Length of cache key name.
+ * @return const char*   Pointer to the rendered null-terminated result.
+ */
+extern "C" const char *JQen_Render2(const char *content, unsigned int content_length, const char *json,
+                                    unsigned int json_length, const char *name, unsigned int name_length) noexcept {
+    Array<Tags::TagBit> *tags;
+    QentemRenderStorage::Stream.Clear();
 
-    stream.Clear();
-
-    if (name.length() != 0) {
-        tags = &(cache.Get(name.c_str(), name.length()));
+    if ((name != nullptr) && (name_length != 0)) {
+        tags = &(QentemRenderStorage::Map.Get(name, name_length));
     } else {
-        tags_cache.Clear();
-        tags = &tags_cache;
+        QentemRenderStorage::TagsCache.Clear();
+        tags = &(QentemRenderStorage::TagsCache);
     }
 
-    const Qentem::Value<char> value = Qentem::JSON::Parse(json.c_str(), json.length());
-    Qentem::Template::Render(content.c_str(), content.length(), value, stream, *tags);
+    const Value<char> value = JSON::Parse(json, json_length);
+    Template::Render(content, content_length, value, QentemRenderStorage::Stream, *tags);
+    QentemRenderStorage::Stream.InsertNull();
 
-    return std::string{stream.First(), stream.Length()};
+    return QentemRenderStorage::Stream.First();
 }
 
-static std::string JQen_Render(const std::string &content, const std::string &json) {
-    return JQen_Render(content, json, "");
+extern "C" const char *JQen_Render(const char *content, const char *json, const char *name) noexcept {
+    return JQen_Render2(content, StringUtils::Count(content), json, StringUtils::Count(json), name,
+                        StringUtils::Count(name));
 }
 
 #ifdef JQEN_ENABLE_TESTS
 #include "Test.hpp"
 
-std::string JQen_RunTests() {
+extern "C" const char *JQen_RunTests() {
+    Qentem::TestOutput::GetStreamCache().Clear();
     Qentem::TestOutput::DisableOutput();
 
     Qentem::TestOutput::IsColored() = false;
@@ -46,16 +80,9 @@ std::string JQen_RunTests() {
     Qentem::Test::RunTests();
     // Qentem::MemoryRecord::PrintMemoryStatus();
     auto &ss = Qentem::TestOutput::GetStreamCache();
-    return std::string{ss.First(), ss.Length()};
+
+    ss.InsertNull();
+
+    return ss.First();
 }
 #endif
-
-EMSCRIPTEN_BINDINGS(overload) {
-    function("JQen_Render", select_overload<std::string(const std::string &, const std::string &)>(JQen_Render));
-    function("JQen_Render",
-             select_overload<std::string(const std::string &, const std::string &, const std::string &)>(JQen_Render));
-
-#ifdef JQEN_ENABLE_TESTS
-    function("JQen_RunTests", &JQen_RunTests);
-#endif
-}

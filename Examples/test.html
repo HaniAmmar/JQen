@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <title>JQen Tests</title>
+</head>
+
+<body>
+    <div id="container">
+        <fieldset>
+            <legend>Result:</legend>
+            <textarea id="test_result" cols="50" rows="25"></textarea>
+        </fieldset>
+        <br>
+        <br>
+        <button id="run_test">Run Template Tests</button>
+    </div>
+    <script src="JQen.js" defer></script>
+    <script type='text/javascript'>
+        "use strict";
+
+        const tr = document.getElementById("test_result");
+
+        const JQenTests = (() => {
+            let instance = null;
+
+            const load = async () => {
+                if (!instance) {
+                    instance = JQenModule().then((Module) => {
+                        Module.RunTests = Module.cwrap("JQen_RunTests", "string");
+                        return Module;
+                    });
+                }
+
+                return instance;
+            };
+
+            return async () => {
+                const Module = await load();
+                return Module.RunTests();
+            };
+        })();
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("run_test").addEventListener("click", async () => {
+                tr.value = await JQenTests();
+            });
+        });
+    </script>
+</body>
+
+</html>

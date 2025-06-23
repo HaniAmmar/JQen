@@ -9,24 +9,36 @@
 
 <body>
     <div id="container"></div>
+    <script src="JQen.js" defer></script>
     <script>
-        var Module, data, template = `
+        const template = `
 <div>{if case="{var:one} + {var:two} >= {var:three}" true="3" false="not three"}</div>
 <div>{if case="{var:one}" true="{var:one}" false="not one"}</div>
 {if case="{var:name} == Qentem" true="<div>Qentem!</div>"}
 `;
 
-        data = '{"one":"1","two":"2","three":"3","name":"Qentem"}';
+        const data = '{"one":"1","two":"2","three":"3","name":"Qentem"}';
 
-        Module = {
-            onRuntimeInitialized: function () {
-                document.getElementById("container").innerHTML = Module.JQen_Render(template, data,
-                    "template name" // Optional for caching parsed template.
-                );
-            }
-        };
+        const JQenRender = (() => {
+            let instance = null;
+
+            return async (template, data, name = "") => {
+                if (!instance) {
+                    instance = JQenModule().then((Module) => {
+                        Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
+                        return Module;
+                    });
+                }
+
+                return (await instance).Render(template, data, name);
+            };
+        })();
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            document.getElementById("container").innerHTML = await JQenRender(template, data, "Inline If Example");
+
+        });
     </script>
-    <script src="JQen.js"></script>
 </body>
 
 </html>

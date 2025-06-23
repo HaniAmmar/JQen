@@ -56,25 +56,32 @@ JQen templates can be tested live at [JQen Tool](https://haniammar.github.io/JQe
 Insert variables into your template using `{var:...}` syntax:
 
 ```js
-var Module,
-    data,
-    template = `
+const template = `
 <div>{var:v1}</div>
 <div>{var:sub-list1[sv1]}</div>
 <div>{var:sub-list2[0]}</div>
 `;
 
-data = '{"v1":"Qentem","sub-list1":{"sv1":"JQen"},"sub-list2":[77]}';
+const data = '{"v1":"Qentem","sub-list1":{"sv1":"BQen"},"sub-list2":[77]}';
 
-Module = {
-    onRuntimeInitialized: function () {
-        document.getElementById("main").innerHTML = Module.JQen_Render(
-            template,
-            data,
-            "template name" // Optional: name for parsed template cache.
-        );
-    },
-};
+const JQenRender = (() => {
+    let instance = null;
+
+    return async (template, data, name = "") => {
+        if (!instance) {
+            instance = JQenModule().then((Module) => {
+                Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
+                return Module;
+            });
+        }
+
+        return (await instance).Render(template, data, name);
+    };
+})();
+
+document.addEventListener("DOMContentLoaded", async () => {
+    document.getElementById("container").innerHTML = await JQenRender(template, data, "Variables Example");
+});
 ```
 
 ---
@@ -84,23 +91,34 @@ Module = {
 Evaluate arithmetic expressions in your template:
 
 ```js
-var Module,
-    data,
-    template = `
-<div>0.1+0.2 is: {math: 0.1 + 0.2}</div>
-<div>{var:one}+{var:four}*{var:two}+{var:one} = {math:{var:one}+{var:four}*{var:two}+{var:one}}</div>
+const template = `
+<div>0.1+0.2 is: {math: 0.1  +   0.2 }</div>
+<div>{var:one}+{var:four}*{var:two}+{var:one} = {math:{var:one}+{var:four}*{var:two}+{var:one}}; (1+8+1)</div>
 <div>6^2 = {math:6^2}</div>
 <div>{var:one}+{var:three} = {math:{var:one}+{var:three}}</div>
 <div>9 % 5 = {math:9 % 5}</div>
 `;
 
-data = '{"one":1,"two":2,"three":3,"four":4}';
+const data = '{"one":1,"two":2,"three":3,"four":4}';
 
-Module = {
-    onRuntimeInitialized: function () {
-        document.getElementById("main").innerHTML = Module.JQen_Render(template, data, "template name");
-    },
-};
+const JQenRender = (() => {
+    let instance = null;
+
+    return async (template, data, name = "") => {
+        if (!instance) {
+            instance = JQenModule().then((Module) => {
+                Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
+                return Module;
+            });
+        }
+
+        return (await instance).Render(template, data, name);
+    };
+})();
+
+document.addEventListener("DOMContentLoaded", async () => {
+    document.getElementById("container").innerHTML = await JQenRender(template, data, "Math Example");
+});
 ```
 
 ---
@@ -110,21 +128,32 @@ Module = {
 Add conditional logic directly within templates:
 
 ```js
-var Module,
-    data,
-    template = `
+const template = `
 <div>{if case="{var:one} + {var:two} >= {var:three}" true="3" false="not three"}</div>
 <div>{if case="{var:one}" true="{var:one}" false="not one"}</div>
 {if case="{var:name} == Qentem" true="<div>Qentem!</div>"}
 `;
 
-data = '{"one":"1","two":"2","three":"3","name":"Qentem"}';
+const data = '{"one":"1","two":"2","three":"3","name":"Qentem"}';
 
-Module = {
-    onRuntimeInitialized: function () {
-        document.getElementById("main").innerHTML = Module.JQen_Render(template, data, "template name");
-    },
-};
+const JQenRender = (() => {
+    let instance = null;
+
+    return async (template, data, name = "") => {
+        if (!instance) {
+            instance = JQenModule().then((Module) => {
+                Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
+                return Module;
+            });
+        }
+
+        return (await instance).Render(template, data, name);
+    };
+})();
+
+document.addEventListener("DOMContentLoaded", async () => {
+    document.getElementById("container").innerHTML = await JQenRender(template, data, "Inline If Example");
+});
 ```
 
 ---
@@ -134,9 +163,7 @@ Module = {
 Render arrays and objects using loops:
 
 ```js
-var Module,
-    data,
-    template = `
+const template = `
 <loop set="object" value="item">
     <div>{var:item[var1]} {var:item[var2]} {var:item[var3]} {var:item[var4]}</div>
 </loop>
@@ -146,23 +173,56 @@ var Module,
 </loop>
 `;
 
-data = `
+const data = `
 {
     "object": [
-        {"var1": "value1", "var2": "value2", "var3": "value3", "var4": "value4"},
-        {"var1": "value5", "var2": "value6", "var3": "value7", "var4": "value8"}
+        {
+            "var1": "value1",
+            "var2": "value2",
+            "var3": "value3",
+            "var4": "value4"
+        },
+        {
+            "var1": "value5",
+            "var2": "value6",
+            "var3": "value7",
+            "var4": "value8"
+        }
     ],
     "array": [
-        ["value10", "value20", "value30", "value40"],
-        ["value100", "value200", "value300", "value400"]
+        [
+            "value10",
+            "value20",
+            "value30",
+            "value40"
+        ],
+        [
+            "value100",
+            "value200",
+            "value300",
+            "value400"
+        ]
     ]
 }`;
 
-Module = {
-    onRuntimeInitialized: function () {
-        document.getElementById("main").innerHTML = Module.JQen_Render(template, data, "template name");
-    },
-};
+const JQenRender = (() => {
+    let instance = null;
+
+    return async (template, data, name = "") => {
+        if (!instance) {
+            instance = JQenModule().then((Module) => {
+                Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
+                return Module;
+            });
+        }
+
+        return (await instance).Render(template, data, name);
+    };
+})();
+
+document.addEventListener("DOMContentLoaded", async () => {
+    document.getElementById("container").innerHTML = await JQenRender(template, data, "Loop Example");
+});
 ```
 
 ---
@@ -172,9 +232,7 @@ Module = {
 Use full conditional blocks for complex logic:
 
 ```js
-var Module,
-    data,
-    template = `
+const template = `
 <if case="{var:0} == 0">
 <div>Zero!</div>
 </if>
@@ -187,7 +245,7 @@ Zero!
 
 <if case="{var:2} == 0">
 Zero!
-<else if case="{var:2} == 2">
+<elseif case="{var:2} == 2" />
 <div>Two!</div>
 <else />
 Not zero or one.
@@ -195,25 +253,34 @@ Not zero or one.
 
 <if case="{var:2} == 0">
 Zero!
-<else if case="{var:2} == 5">
+<elseif case="{var:2} == 5" />
 Two!
-<else if case="{var:3} == 3">
+<elseif case="{var:3} == 3" />
 <div>{var:3}</div>
-<else>
+<else />
 Not zero or one or two.
 </if>`;
 
-data = "[0,1,2,3]";
+const data = "[0,1,2,3]";
 
-Module = {
-    onRuntimeInitialized: function () {
-        JQen_Render(
-            template,
-            data,
-            "template name" // (Optional) Name to cache the parsed template.
-        );
-    },
-};
+const JQenRender = (() => {
+    let instance = null;
+
+    return async (template, data, name = "") => {
+        if (!instance) {
+            instance = JQenModule().then((Module) => {
+                Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
+                return Module;
+            });
+        }
+
+        return (await instance).Render(template, data, name);
+    };
+})();
+
+document.addEventListener("DOMContentLoaded", async () => {
+    document.getElementById("container").innerHTML = await JQenRender(template, data, "If Example");
+});
 ```
 
 ---
@@ -224,17 +291,42 @@ A complete HTML page using JQen:
 
 ```html
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" type="text/css" href="style.css" />
         <title>JQen Page Example</title>
     </head>
+
     <body>
-        <div id="main"></div>
-        <script>
-            var Module,
-                data,
-                template = `<h2>Students' list:</h2>
+        <div id="container">
+            <fieldset>
+                <legend>Template:</legend>
+                <textarea id="template_txt" cols="80" rows="18"></textarea>
+            </fieldset>
+            <fieldset>
+                <legend>JSON:</legend>
+                <textarea id="json_txt" cols="80" rows="18"></textarea>
+            </fieldset>
+            <br />
+            <fieldset>
+                <legend>Result:</legend>
+                <textarea id="rendered_txt" cols="80" rows="18"></textarea>
+            </fieldset>
+            <br />
+            <br />
+            <button id="render">Render Template</button>
+        </div>
+        <script src="JQen.js" defer></script>
+        <script type="text/javascript">
+            "use strict";
+            (function () {
+                const rt = document.getElementById("rendered_txt"),
+                    tt = document.getElementById("template_txt"),
+                    jt = document.getElementById("json_txt");
+
+                tt.value = `<h2>Students' list:</h2>
 <loop value="department_val">
     <h3>Major: {var:department_val[major]}</h3>
     <ul>
@@ -245,7 +337,7 @@ A complete HTML page using JQen:
                 GPA: {var:student_val[GPA]}
                 <if case="{var:student_val[GPA]} < 2.5"> (Inform adviser!)
                 <else if case="{var:student_val[GPA]} >= 3.5"> (President's List!)
-                <else if case="{var:student_val[GPA]} >= 3.0"> (Dean's List!)
+                <elseif case='{var:student_val[GPA]} >= 3.0'> (Dean's List!)
                 </if>
             </span>
         </li>
@@ -253,36 +345,54 @@ A complete HTML page using JQen:
     </ul>
 </loop>`;
 
-            data = [
-                {
-                    major: "Computer Science",
-                    students: [
-                        { Name: "Student1", GPA: 3.2 },
-                        { Name: "Student2", GPA: 3.8 },
-                        { Name: "Student3", GPA: 2.8 },
-                    ],
-                },
-                {
-                    major: "Math",
-                    students: [
-                        { Name: "Student4", GPA: 3.0 },
-                        { Name: "Student5", GPA: 2.5 },
-                        { Name: "Student6", GPA: 2.4 },
-                    ],
-                },
-            ];
+                jt.value = `[
+    {
+        "major": "Computer Science",
+        "students": [
+            { "Name": "Student1", "GPA": 3.2 },
+            { "Name": "Student2", "GPA": 3.8 },
+            { "Name": "Student3", "GPA": 2.8 }
+        ]
+    },
+    {
+        "major": "Math",
+        "students": [
+            { "Name": "Student4", "GPA": 3.0 },
+            { "Name": "Student5", "GPA": 2.5 },
+            { "Name": "Student6", "GPA": 2.4 }
+        ]
+    }
+]`;
 
-            Module = {
-                onRuntimeInitialized: function () {
-                    document.getElementById("main").innerHTML = Module.JQen_Render(
-                        template,
-                        JSON.stringify(data),
-                        "MainPage"
-                    );
-                },
-            };
+                const JQenRender = (() => {
+                    let instance = null;
+
+                    return async (template, data, name = "") => {
+                        if (!instance) {
+                            instance = JQenModule().then((Module) => {
+                                Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
+                                return Module;
+                            });
+                        }
+
+                        return (await instance).Render(template, data, name);
+                    };
+                })();
+
+                // Attach event
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.getElementById("render").addEventListener("click", async () => {
+                        // Render without caching — suitable for dynamic, one-off templates.
+                        rt.value = await JQenRender(tt.value, jt.value);
+
+                        // If a name is passed (e.g., "home_page"), the template will be cached and reused,
+                        // significantly improving performance — up to **3.5× faster** on repeated renders.
+
+                        // rt.value = await JQenRender(tt.value, jt.value, "home_page");
+                    });
+                });
+            })();
         </script>
-        <script src="JQen.js"></script>
     </body>
 </html>
 ```
@@ -304,7 +414,16 @@ Full template syntax: [Qentem-Engine/Template.md](https://github.com/HaniAmmar/Q
 git submodule update --init
 
 mkdir Build
-em++ -lembind -Oz -flto -fno-exceptions -std=c++17 -I ./qentem/Include ./Source/QLib.cpp -o ./Build/JQen.js
+
+em++ -std=c++17 -Oz -flto=auto -fno-exceptions \
+  -s MODULARIZE=1 \
+  -s EXPORT_NAME="JQenModule" \
+  -s EXPORTED_FUNCTIONS="['_JQen_Render']" \
+  -s EXPORTED_RUNTIME_METHODS="['cwrap']" \
+  -s ALLOW_MEMORY_GROWTH=1 \
+  -I ./qentem/Include \
+  -o Build/JQen.js \
+  ./Source/QLib.cpp
 ```
 
 -   Compiled WASM files and releases:

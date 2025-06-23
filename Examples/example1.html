@@ -4,29 +4,40 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>JQen Variable Example</title>
+    <title>JQen Variables Example</title>
 </head>
 
 <body>
     <div id="container"></div>
+    <script src="JQen.js" defer></script>
     <script>
-        var Module, data, template = `
+        const template = `
 <div>{var:v1}</div>
 <div>{var:sub-list1[sv1]}</div>
 <div>{var:sub-list2[0]}</div>
 `;
 
-        data = '{"v1":"Qentem","sub-list1":{"sv1":"BQen"},"sub-list2":[77]}';
+        const data = '{"v1":"Qentem","sub-list1":{"sv1":"BQen"},"sub-list2":[77]}';
 
-        Module = {
-            onRuntimeInitialized: function () {
-                document.getElementById("container").innerHTML = Module.JQen_Render(template, data,
-                    "template name" // Optional for caching parsed template.
-                );
-            }
-        };
+        const JQenRender = (() => {
+            let instance = null;
+
+            return async (template, data, name = "") => {
+                if (!instance) {
+                    instance = JQenModule().then((Module) => {
+                        Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
+                        return Module;
+                    });
+                }
+
+                return (await instance).Render(template, data, name);
+            };
+        })();
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            document.getElementById("container").innerHTML = await JQenRender(template, data, "Variables Example");
+        });
     </script>
-    <script src="JQen.js"></script>
 </body>
 
 </html>

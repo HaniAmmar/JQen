@@ -9,8 +9,9 @@
 
 <body>
     <div id="container"></div>
+    <script src="JQen.js" defer></script>
     <script>
-        var Module, data, template = `
+        const template = `
 <if case="{var:0} == 0">
 <div>Zero!</div>
 </if>
@@ -23,7 +24,7 @@ Zero!
 
 <if case="{var:2} == 0">
 Zero!
-<else if case="{var:2} == 2">
+<elseif case="{var:2} == 2" />
 <div>Two!</div>
 <else />
 Not zero or one.
@@ -31,25 +32,35 @@ Not zero or one.
 
 <if case="{var:2} == 0">
 Zero!
-<else if case="{var:2} == 5">
+<elseif case="{var:2} == 5" />
 Two!
-<else if case="{var:3} == 3">
+<elseif case="{var:3} == 3" />
 <div>{var:3}</div>
 <else />
 Not zero or one or two.
 </if>`;
 
-        data = "[0,1,2,3]";
+        const data = "[0,1,2,3]";
 
-        Module = {
-            onRuntimeInitialized: function () {
-                document.getElementById("container").innerHTML = Module.JQen_Render(template, data,
-                    "template name" // Optional for caching parsed template.
-                );
-            }
-        };
+        const JQenRender = (() => {
+            let instance = null;
+
+            return async (template, data, name = "") => {
+                if (!instance) {
+                    instance = JQenModule().then((Module) => {
+                        Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
+                        return Module;
+                    });
+                }
+
+                return (await instance).Render(template, data, name);
+            };
+        })();
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            document.getElementById("container").innerHTML = await JQenRender(template, data, "If Example");
+        });
     </script>
-    <script src="JQen.js"></script>
 </body>
 
 </html>

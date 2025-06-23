@@ -9,8 +9,9 @@
 
 <body>
     <div id="container"></div>
+    <script src="JQen.js" defer></script>
     <script>
-        var Module, data, template = `
+        const template = `
 <loop set="object" value="item">
     <div>{var:item[var1]} {var:item[var2]} {var:item[var3]} {var:item[var4]}</div>
 </loop>
@@ -20,7 +21,7 @@
 </loop>
 `;
 
-        data = `
+        const data = `
 {
     "object": [
         {
@@ -52,15 +53,25 @@
     ]
 }`;
 
-        Module = {
-            onRuntimeInitialized: function () {
-                document.getElementById("main").innerHTML = Module.JQen_Render(template, data,
-                    "template name" // Optional for caching parsed template.
-                );
-            }
-        };
+        const JQenRender = (() => {
+            let instance = null;
+
+            return async (template, data, name = "") => {
+                if (!instance) {
+                    instance = JQenModule().then((Module) => {
+                        Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
+                        return Module;
+                    });
+                }
+
+                return (await instance).Render(template, data, name);
+            };
+        })();
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            document.getElementById("container").innerHTML = await JQenRender(template, data, "Loop Example");
+        });
     </script>
-    <script src="JQen.js"></script>
 </body>
 
 </html>

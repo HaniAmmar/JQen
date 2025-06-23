@@ -415,7 +415,7 @@ git submodule update --init
 
 mkdir Build
 
-em++ -std=c++17 -Oz -flto=auto -fno-exceptions \
+em++ -std=c++17 -Oz --closure 1 -flto=auto -fno-exceptions \
   -s MODULARIZE=1 \
   -s EXPORT_NAME="JQenModule" \
   -s EXPORTED_FUNCTIONS="['_JQen_Render']" \

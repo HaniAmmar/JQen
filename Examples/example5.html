@@ -42,23 +42,9 @@ Not zero or one or two.
 
         const data = "[0,1,2,3]";
 
-        const JQenRender = (() => {
-            let instance = null;
-
-            return async (template, data, name = "") => {
-                if (!instance) {
-                    instance = JQenModule().then((Module) => {
-                        Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
-                        return Module;
-                    });
-                }
-
-                return (await instance).Render(template, data, name);
-            };
-        })();
-
         document.addEventListener("DOMContentLoaded", async () => {
-            document.getElementById("container").innerHTML = await JQenRender(template, data, "If Example");
+            const JQenRender = await LoadJQenRender();
+            document.getElementById("container").innerHTML = JQenRender(template, data, "If Example");
         });
     </script>
 </body>

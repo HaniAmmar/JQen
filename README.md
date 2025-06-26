@@ -62,25 +62,18 @@ const template = `
 <div>{var:sub-list2[0]}</div>
 `;
 
-const data = '{"v1":"Qentem","sub-list1":{"sv1":"BQen"},"sub-list2":[77]}';
-
-const JQenRender = (() => {
-    let instance = null;
-
-    return async (template, data, name = "") => {
-        if (!instance) {
-            instance = JQenModule().then((Module) => {
-                Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
-                return Module;
-            });
-        }
-
-        return (await instance).Render(template, data, name);
-    };
-})();
-
 document.addEventListener("DOMContentLoaded", async () => {
-    document.getElementById("container").innerHTML = await JQenRender(template, data, "Variables Example");
+    // This call initializes the WebAssembly module.
+    // invoking LoadJQenRender() again would reinitialize the module,
+    // which is inefficient and unnecessary. Instead, cache and reuse
+    // the returned JQenRender() function for all rendering tasks.
+    const JQenRender = await LoadJQenRender();
+
+    // Call the renderer with the given template, data, and an optional name.
+    // It returns the rendered HTML string, which we insert into the container element.
+    // If a name is passed (e.g., "home_page"), the template will be cached and reused,
+    // significantly improving performance — up to **3.5× faster** on repeated renders.
+    document.getElementById("container").innerHTML = JQenRender(template, data, "Variables Example");
 });
 ```
 
@@ -101,23 +94,9 @@ const template = `
 
 const data = '{"one":1,"two":2,"three":3,"four":4}';
 
-const JQenRender = (() => {
-    let instance = null;
-
-    return async (template, data, name = "") => {
-        if (!instance) {
-            instance = JQenModule().then((Module) => {
-                Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
-                return Module;
-            });
-        }
-
-        return (await instance).Render(template, data, name);
-    };
-})();
-
 document.addEventListener("DOMContentLoaded", async () => {
-    document.getElementById("container").innerHTML = await JQenRender(template, data, "Math Example");
+    const JQenRender = await LoadJQenRender();
+    document.getElementById("container").innerHTML = JQenRender(template, data, "Math Example");
 });
 ```
 
@@ -136,23 +115,9 @@ const template = `
 
 const data = '{"one":"1","two":"2","three":"3","name":"Qentem"}';
 
-const JQenRender = (() => {
-    let instance = null;
-
-    return async (template, data, name = "") => {
-        if (!instance) {
-            instance = JQenModule().then((Module) => {
-                Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
-                return Module;
-            });
-        }
-
-        return (await instance).Render(template, data, name);
-    };
-})();
-
 document.addEventListener("DOMContentLoaded", async () => {
-    document.getElementById("container").innerHTML = await JQenRender(template, data, "Inline If Example");
+    const JQenRender = await LoadJQenRender();
+    document.getElementById("container").innerHTML = JQenRender(template, data, "Inline If Example");
 });
 ```
 
@@ -205,23 +170,9 @@ const data = `
     ]
 }`;
 
-const JQenRender = (() => {
-    let instance = null;
-
-    return async (template, data, name = "") => {
-        if (!instance) {
-            instance = JQenModule().then((Module) => {
-                Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
-                return Module;
-            });
-        }
-
-        return (await instance).Render(template, data, name);
-    };
-})();
-
 document.addEventListener("DOMContentLoaded", async () => {
-    document.getElementById("container").innerHTML = await JQenRender(template, data, "Loop Example");
+    const JQenRender = await LoadJQenRender();
+    document.getElementById("container").innerHTML = JQenRender(template, data, "Loop Example");
 });
 ```
 
@@ -263,23 +214,9 @@ Not zero or one or two.
 
 const data = "[0,1,2,3]";
 
-const JQenRender = (() => {
-    let instance = null;
-
-    return async (template, data, name = "") => {
-        if (!instance) {
-            instance = JQenModule().then((Module) => {
-                Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
-                return Module;
-            });
-        }
-
-        return (await instance).Render(template, data, name);
-    };
-})();
-
 document.addEventListener("DOMContentLoaded", async () => {
-    document.getElementById("container").innerHTML = await JQenRender(template, data, "If Example");
+    const JQenRender = await LoadJQenRender();
+    document.getElementById("container").innerHTML = JQenRender(template, data, "If Example");
 });
 ```
 
@@ -364,31 +301,11 @@ A complete HTML page using JQen:
     }
 ]`;
 
-                const JQenRender = (() => {
-                    let instance = null;
+                document.addEventListener("DOMContentLoaded", async () => {
+                    const JQenRender = await LoadJQenRender();
 
-                    return async (template, data, name = "") => {
-                        if (!instance) {
-                            instance = JQenModule().then((Module) => {
-                                Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
-                                return Module;
-                            });
-                        }
-
-                        return (await instance).Render(template, data, name);
-                    };
-                })();
-
-                // Attach event
-                document.addEventListener("DOMContentLoaded", () => {
-                    document.getElementById("render").addEventListener("click", async () => {
-                        // Render without caching — suitable for dynamic, one-off templates.
-                        rt.value = await JQenRender(tt.value, jt.value);
-
-                        // If a name is passed (e.g., "home_page"), the template will be cached and reused,
-                        // significantly improving performance — up to **3.5× faster** on repeated renders.
-
-                        // rt.value = await JQenRender(tt.value, jt.value, "home_page");
+                    document.getElementById("render").addEventListener("click", () => {
+                        rt.value = JQenRender(tt.value, jt.value);
                     });
                 });
             })();
@@ -412,15 +329,14 @@ Full template syntax: [Qentem-Engine/Template.md](https://github.com/HaniAmmar/Q
 
 ```shell
 git submodule update --init
-
 mkdir Build
-
 em++ -std=c++17 -Oz --closure 1 -flto=auto -fno-exceptions \
   -s MODULARIZE=1 \
   -s EXPORT_NAME="JQenModule" \
-  -s EXPORTED_FUNCTIONS="['_JQen_Render']" \
+  -s EXPORTED_FUNCTIONS="['_JQenRender']" \
   -s EXPORTED_RUNTIME_METHODS="['cwrap']" \
   -s ALLOW_MEMORY_GROWTH=1 \
+  --extern-post-js ./Source/JQenPost.js \
   -I ./qentem/Include \
   -o Build/JQen.js \
   ./Source/QLib.cpp

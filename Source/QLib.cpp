@@ -17,7 +17,6 @@ void operator delete(void *, Type_T *) noexcept {
 }
 #endif // QENTEM_ALLOCATE
 
-#include "QCommon.hpp"
 #include "JSON.hpp"
 #include "Template.hpp"
 
@@ -43,12 +42,12 @@ struct QentemRenderStorage {
  * @param name_length    Length of cache key name.
  * @return const char*   Pointer to the rendered null-terminated result.
  */
-extern "C" const char *JQen_Render2(const char *content, unsigned int content_length, const char *json,
-                                    unsigned int json_length, const char *name, unsigned int name_length) noexcept {
+extern "C" const char *JQenRender(const char *content, unsigned int content_length, const char *json,
+                                  unsigned int json_length, const char *name, unsigned int name_length) noexcept {
     Array<Tags::TagBit> *tags;
     QentemRenderStorage::Stream.Clear();
 
-    if ((name != nullptr) && (name_length != 0)) {
+    if (name_length != 0) {
         tags = &(QentemRenderStorage::Map.Get(name, name_length));
     } else {
         QentemRenderStorage::TagsCache.Clear();
@@ -60,11 +59,6 @@ extern "C" const char *JQen_Render2(const char *content, unsigned int content_le
     QentemRenderStorage::Stream.InsertNull();
 
     return QentemRenderStorage::Stream.First();
-}
-
-extern "C" const char *JQen_Render(const char *content, const char *json, const char *name) noexcept {
-    return JQen_Render2(content, StringUtils::Count(content), json, StringUtils::Count(json), name,
-                        StringUtils::Count(name));
 }
 
 #ifdef JQEN_ENABLE_TESTS

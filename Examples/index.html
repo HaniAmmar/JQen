@@ -73,24 +73,11 @@
     }
 ]`;
 
-            const JQenRender = (() => {
-                let instance = null;
+            document.addEventListener("DOMContentLoaded", async () => {
+                const JQenRender = await LoadJQenRender();
 
-                return async (template, data, name = "") => {
-                    if (!instance) {
-                        instance = JQenModule().then((Module) => {
-                            Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
-                            return Module;
-                        });
-                    }
-
-                    return (await instance).Render(template, data, name);
-                };
-            })();
-
-            document.addEventListener("DOMContentLoaded", () => {
-                document.getElementById("render").addEventListener("click", async () => {
-                    rt.value = await JQenRender(tt.value, jt.value);
+                document.getElementById("render").addEventListener("click", () => {
+                    rt.value = JQenRender(tt.value, jt.value);
                 });
             });
         })();

@@ -19,24 +19,9 @@
 
         const data = '{"one":"1","two":"2","three":"3","name":"Qentem"}';
 
-        const JQenRender = (() => {
-            let instance = null;
-
-            return async (template, data, name = "") => {
-                if (!instance) {
-                    instance = JQenModule().then((Module) => {
-                        Module.Render = Module.cwrap("JQen_Render", "string", ["string", "string", "string"]);
-                        return Module;
-                    });
-                }
-
-                return (await instance).Render(template, data, name);
-            };
-        })();
-
         document.addEventListener("DOMContentLoaded", async () => {
-            document.getElementById("container").innerHTML = await JQenRender(template, data, "Inline If Example");
-
+            const JQenRender = await LoadJQenRender();
+            document.getElementById("container").innerHTML = JQenRender(template, data, "Inline If Example");
         });
     </script>
 </body>

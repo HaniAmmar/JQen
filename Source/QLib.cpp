@@ -1,10 +1,6 @@
 #include <cstddef>
 
-#ifndef QENTEM_ALLOCATE
-#define QENTEM_ALLOCATE(size) __builtin_malloc(size)
-#define QENTEM_DEALLOCATE(ptr) __builtin_free(ptr)
-#define QENTEM_RAW_ALLOCATE(size) __builtin_malloc(size)
-#define QENTEM_RAW_DEALLOCATE(ptr) __builtin_free(ptr)
+#define QENTEM_NO_CUSTOM_PLACEMENT_NEW
 
 template <typename Type_T>
 void *operator new(std::size_t, Type_T *ptr) noexcept {
@@ -15,10 +11,13 @@ template <typename Type_T>
 void operator delete(void *, Type_T *) noexcept {
     // No-op: required to match placement new
 }
-#endif // QENTEM_ALLOCATE
 
-#include "JSON.hpp"
-#include "Template.hpp"
+#ifdef JQEN_ENABLE_TESTS
+#include "Test.hpp"
+#endif
+
+#include "Qentem/JSON.hpp"
+#include "Qentem/Template.hpp"
 
 using namespace Qentem;
 
@@ -26,9 +25,9 @@ struct QentemRenderStorage {
     using QTagBit = Array<Tags::TagBit>;
     using QHArray = HArray<String<char>, QTagBit>;
 
-    inline static QHArray            Map{2};
-    inline static QTagBit            TagsCache{2};
-    inline static StringStream<char> Stream{64};
+    inline static QHArray            Map{};
+    inline static QTagBit            TagsCache{};
+    inline static StringStream<char> Stream{};
 };
 
 /**
@@ -62,19 +61,15 @@ extern "C" const char *JQenRender(const char *content, unsigned int content_leng
 }
 
 #ifdef JQEN_ENABLE_TESTS
-#include "Test.hpp"
-
-extern "C" const char *JQen_RunTests() {
-    Qentem::TestOutput::GetStreamCache().Clear();
-    Qentem::TestOutput::DisableOutput();
-
-    Qentem::TestOutput::IsColored() = false;
+extern "C" const char *JQenRunTests() {
+    Qentem::QConsole::DisableOutput();
+    Qentem::QConsole::IsColored() = false;
 
     Qentem::QTest::PrintInfo();
     Qentem::Test::RunTests();
-    // Qentem::MemoryRecord::PrintMemoryStatus();
-    auto &ss = Qentem::TestOutput::GetStreamCache();
+    Qentem::QTest::PrintMemoryStatus();
 
+    auto &ss = Qentem::QConsole::GetBuffer();
     ss.InsertNull();
 
     return ss.First();

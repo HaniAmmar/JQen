@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
     <meta charset="utf-8">
@@ -23,15 +23,13 @@
     <script type='text/javascript'>
         "use strict";
 
-        const tr = document.getElementById("test_result");
-
         const JQenTests = (() => {
             let instance = null;
 
             const load = async () => {
                 if (!instance) {
                     instance = JQenModule().then((Module) => {
-                        Module.RunTests = Module.cwrap("JQen_RunTests", "string");
+                        Module.RunTests = Module.cwrap("JQenRunTests", "string");
                         return Module;
                     });
                 }
@@ -47,7 +45,7 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("run_test").addEventListener("click", async () => {
-                tr.value = await JQenTests();
+                document.getElementById("test_result").value = await JQenTests();
             });
         });
     </script>

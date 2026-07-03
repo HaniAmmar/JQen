@@ -1,10 +1,3 @@
-# JQen
-
-JQen is a template rendering engine for JavaScript, powered by the [Qentem Engine](https://github.com/HaniAmmar/Qentem-Engine) and delivered as WebAssembly.&#x20;
-It enables fast, safe, and efficient template rendering with JSON data directly in web browsers.
-
----
-
 ## Table of Contents
 
 -   [What is JQen?](#what-is-jqen)
@@ -25,21 +18,24 @@ It enables fast, safe, and efficient template rendering with JSON data directly 
 
 ## What is JQen?
 
-JQen is a JavaScript module that leverages the Qentem Engine library (via WebAssembly) for fast, safe, and expressive template rendering.
-Bring the full power of C++ template parsing and JSON data handling to web browsers.
+JQen is a WebAssembly-based template engine for browser environments. It uses the core rendering logic from Qentem Engine, allowing JavaScript applications to render templates using structured JSON data with minimal overhead.
+
+Unlike JavaScript template engines that rely on dynamic evaluation, JQen parses and renders templates through a controlled C++ engine, improving performance, consistency, and security.
 
 ---
 
 ## Features
 
--   Fast template rendering implemented in C++ and compiled to WebAssembly.
--   Low memory overhead.
--   Safe evaluation without arbitrary code execution.
--   Variable replacement with automatic HTML escaping.
--   Raw variable replacement (without HTML escaping) is also supported.
--   Nested loops with grouping and sorting.
--   Nested if conditions and inline conditional tags.
--   Arithmetic evaluation via the math tag.
+* Fast template rendering written in C++ and compiled to WebAssembly.
+* Low memory footprint.
+* Safe template evaluation without `eval()` or arbitrary code execution.
+* Automatic HTML escaping for variable output.
+* Raw output support when escaping is not needed.
+* Nested loops with grouping and sorting support.
+* Conditional rendering with nested and inline conditions.
+* Built-in arithmetic operations through math tags.
+* JSON-based rendering input.
+* Consistent behavior across platforms through the shared Qentem Engine core.
 
 ---
 
@@ -335,7 +331,6 @@ em++ -std=c++17 -Oz --closure 1 -flto=auto -fno-exceptions \
   -s EXPORT_NAME="JQenModule" \
   -s EXPORTED_FUNCTIONS="['_JQenRender']" \
   -s EXPORTED_RUNTIME_METHODS="['cwrap']" \
-  -s ALLOW_MEMORY_GROWTH=1 \
   --extern-post-js ./Source/JQenPost.js \
   -I ./qentem/Include \
   -o Build/JQen.js \

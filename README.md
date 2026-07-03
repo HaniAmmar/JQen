@@ -58,6 +58,8 @@ const template = `
 <div>{var:sub-list2[0]}</div>
 `;
 
+const data = '{"v1":"Qentem","sub-list1":{"sv1":"BQen"},"sub-list2":[77]}';
+
 document.addEventListener("DOMContentLoaded", async () => {
     // This call initializes the WebAssembly module.
     // invoking LoadJQenRender() again would reinitialize the module,

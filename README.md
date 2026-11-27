@@ -282,7 +282,7 @@ A complete HTML page using JQen:
 
                 jt.value = `[
     {
-        "major": "Computer Science",
+        "major": "Computer Science 🖥️",
         "students": [
             { "Name": "Student1", "GPA": 3.2 },
             { "Name": "Student2", "GPA": 3.8 },
@@ -290,7 +290,7 @@ A complete HTML page using JQen:
         ]
     },
     {
-        "major": "Math",
+        "major": "Math 📐",
         "students": [
             { "Name": "Student4", "GPA": 3.0 },
             { "Name": "Student5", "GPA": 2.5 },
@@ -332,7 +332,7 @@ em++ -std=c++17 -Oz --closure 1 -flto=auto -fno-exceptions \
   -s MODULARIZE=1 \
   -s EXPORT_NAME="JQenModule" \
   -s EXPORTED_FUNCTIONS="['_JQenRender']" \
-  -s EXPORTED_RUNTIME_METHODS="['cwrap']" \
+  -s EXPORTED_RUNTIME_METHODS="['cwrap','lengthBytesUTF8']" \
   --extern-post-js ./Source/JQenPost.js \
   -I ./qentem/Include \
   -o Build/JQen.js \

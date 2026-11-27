@@ -6,14 +6,16 @@ const LoadJQenRender = () => {
             ["string", "number", "string", "number", "string", "number"]
         );
 
+        const utf8Length = (str) => i.lengthBytesUTF8(str);
+
         return (a, b, c = "") => {
             return i.JQenRender(
                 a,
-                a.length,
+                utf8Length(a),
                 b,
-                b.length,
+                utf8Length(b),
                 c,
-                c.length
+                utf8Length(c)
             );
         };
     });
